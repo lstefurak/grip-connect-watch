@@ -1,0 +1,13 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+.DS_Store
+captures/
+
+# XcodeGen output (regenerate with `xcodegen`)
+watchos/*.xcodeproj/
+xcuserdata/
+DerivedData/

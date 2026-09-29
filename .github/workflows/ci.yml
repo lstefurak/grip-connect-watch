@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  core-and-wear:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Core tests
+        run: ./gradlew :core:jvmTest
+      - name: Build Wear OS app
+        run: ./gradlew :wear:assembleDebug
+
+  watchos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Core tests on watchOS simulator
+        run: ./gradlew :core:watchosSimulatorArm64Test
+      - name: Build GripCore.xcframework
+        run: ./gradlew :core:assembleGripCoreReleaseXCFramework
+      - name: Build watchOS app
+        run: |
+          brew install xcodegen
+          cd watchos && xcodegen
+          xcodebuild -project GripWatch.xcodeproj -scheme GripWatch \
+            -destination 'generic/platform=watchOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO build

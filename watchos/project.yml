@@ -1,0 +1,35 @@
+# Generate the Xcode project with XcodeGen:  brew install xcodegen && xcodegen
+# Build the shared core once first:       (cd .. && ./gradlew :core:assembleGripCoreReleaseXCFramework)
+name: GripWatch
+options:
+  bundleIdPrefix: com.venturilogic.grip
+  deploymentTarget:
+    watchOS: "10.0"
+
+targets:
+  GripWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: Sources
+    dependencies:
+      - framework: ../core/build/XCFrameworks/release/GripCore.xcframework
+        embed: false # static framework
+    preBuildScripts:
+      - name: Build GripCore (Kotlin)
+        basedOnDependencyAnalysis: false
+        script: |
+          cd "$SRCROOT/.."
+          ./gradlew :core:assembleGripCoreReleaseXCFramework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.venturilogic.grip.watch
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Grip Connect
+        INFOPLIST_KEY_WKApplication: YES
+        INFOPLIST_KEY_WKWatchOnly: YES
+        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: Connects to your Force Board or WH-C06 to show live pull force.
+        SWIFT_VERSION: "5.9"
+        # Kotlin/Native static frameworks need these at link time.
+        OTHER_LDFLAGS: "$(inherited) -lc++"
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
