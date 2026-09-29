@@ -33,3 +33,5 @@ targets:
         # Kotlin/Native static frameworks need these at link time.
         OTHER_LDFLAGS: "$(inherited) -lc++"
         ENABLE_USER_SCRIPT_SANDBOXING: NO
+        # GripCore ships an arm64-only simulator slice (watchosSimulatorArm64).
+        EXCLUDED_ARCHS[sdk=watchsimulator*]: x86_64
