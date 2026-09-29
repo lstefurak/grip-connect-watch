@@ -11,7 +11,7 @@ import platform.posix.memcpy
 
 /**
  * Swift bridging for CoreBluetooth `Data` <-> Kotlin `ByteArray`.
- * From Swift: `AppleBytes.shared.toByteArray(data: value as NSData)`.
+ * From Swift (NSData is imported as `Data`): `AppleBytes.shared.toByteArray(data: value)`.
  */
 @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
 object AppleBytes {

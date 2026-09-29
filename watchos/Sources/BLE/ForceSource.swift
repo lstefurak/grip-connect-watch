@@ -18,10 +18,12 @@ protocol ForceSource: AnyObject {
 
 func nowMs() -> Int64 { Int64(Date().timeIntervalSince1970 * 1000) }
 
+// Kotlin/Native exports NSData as Obj-C `NSData *`, which Swift imports as `Data`,
+// so no explicit bridging casts are needed (or allowed) here.
 extension Data {
-    var kotlin: KotlinByteArray { AppleBytes.shared.toByteArray(data: self as NSData) }
+    var kotlin: KotlinByteArray { AppleBytes.shared.toByteArray(data: self) }
 }
 
 extension KotlinByteArray {
-    var data: Data { AppleBytes.shared.toNSData(bytes: self) as Data }
+    var data: Data { AppleBytes.shared.toNSData(bytes: self) }
 }
