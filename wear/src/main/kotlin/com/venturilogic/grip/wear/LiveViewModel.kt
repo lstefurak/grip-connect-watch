@@ -7,6 +7,7 @@ import com.venturilogic.grip.ForceMeasurement
 import com.venturilogic.grip.ForceSession
 import com.venturilogic.grip.ForceUnit
 import com.venturilogic.grip.wear.ble.AndroidForceBoard
+import com.venturilogic.grip.wear.ble.AndroidProgressor
 import com.venturilogic.grip.wear.ble.AndroidWhC06
 import com.venturilogic.grip.wear.ble.ForceSource
 import com.venturilogic.grip.wear.ble.LinkState
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-enum class DeviceKind(val label: String) { FORCE_BOARD("Force Board"), WH_C06("WH-C06") }
+enum class DeviceKind(val label: String) { FORCE_BOARD("Force Board"), PROGRESSOR("Progressor"), WH_C06("WH-C06") }
 
 /**
  * Glue: platform ForceSource -> shared ForceSession -> UI state.
@@ -42,6 +43,7 @@ class LiveViewModel(app: Application) : AndroidViewModel(app) {
         disconnect()
         val src = when (kind) {
             DeviceKind.FORCE_BOARD -> AndroidForceBoard(getApplication(), viewModelScope)
+            DeviceKind.PROGRESSOR -> AndroidProgressor(getApplication(), viewModelScope)
             DeviceKind.WH_C06 -> AndroidWhC06(getApplication(), viewModelScope)
         }
         val s = ForceSession(streamUnit = src.streamUnit, displayUnit = _unit.value)

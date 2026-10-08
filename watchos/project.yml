@@ -28,7 +28,7 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: Grip Connect
         INFOPLIST_KEY_WKApplication: YES
         INFOPLIST_KEY_WKWatchOnly: YES
-        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: Connects to your Force Board or WH-C06 to show live pull force.
+        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: Connects to your Force Board, Progressor or WH-C06 to show live pull force.
         SWIFT_VERSION: "5.9"
         # Kotlin/Native static frameworks need these at link time.
         OTHER_LDFLAGS: "$(inherited) -lc++"

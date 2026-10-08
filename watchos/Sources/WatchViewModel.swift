@@ -3,6 +3,7 @@ import GripCore
 
 enum DeviceKind: String, CaseIterable, Identifiable {
     case forceBoard = "Force Board"
+    case progressor = "Progressor"
     case whc06 = "WH-C06"
     var id: String { rawValue }
 }
@@ -24,7 +25,11 @@ final class WatchViewModel: ObservableObject {
 
     func connect(_ kind: DeviceKind) {
         disconnect()
-        let src: ForceSource = kind == .forceBoard ? ForceBoardClient() : WhC06Scanner()
+        let src: ForceSource = switch kind {
+        case .forceBoard: ForceBoardClient()
+        case .progressor: ProgressorClient()
+        case .whc06: WhC06Scanner()
+        }
         let s = ForceSession(streamUnit: src.streamUnit,
                              displayUnit: unit,
                              activity: ActivityConfig(threshold: 2.5, durationMs: 1_000))
