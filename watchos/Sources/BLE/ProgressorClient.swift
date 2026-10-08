@@ -200,8 +200,8 @@ extension ProgressorClient: CBCentralManagerDelegate {
         let services = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] ?? []
         // "Progressor_4760" on a real unit. A unit stuck in its DFU bootloader advertises
         // "dfu_target_xxxx" and does not match.
-        let named = localName?.lowercased().hasPrefix(pg.NAME_PREFIX.lowercased()) == true
-        guard named || services.contains(progressorService), peripheral == nil else { return }
+        guard pg.matchesAdvertisement(localName: localName, serviceUuids: services.map { $0.uuidString }),
+              peripheral == nil else { return }
         scanTimeout?.cancel()
         central.stopScan()
         peripheral = p
@@ -297,7 +297,9 @@ extension ProgressorClient: CBPeripheralDelegate {
             lowPowerSeen = true
             return
         }
-        lastDataMs = t // Any frame keeps the watchdog quiet, even one dropped below.
+        // Only a valid weight frame counts as data: truncated or unknown frames must not
+        // hide a stalled stream from the watchdog.
+        if pg.responseOf(packet: packet) == Progressor.Response.weightMeasurement { lastDataMs = t }
         guard streaming, !tareBlackout else { return }
         let weights = pg.parseWeights(packet: packet)
         for i in 0..<weights.size {

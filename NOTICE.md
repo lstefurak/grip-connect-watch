@@ -66,4 +66,5 @@ https://github.com/blims/Tindeq-Progressor-API
 
 The real-unit weight records in `core/src/commonTest/.../ProgressorTest.kt` come
 from a capture published in https://github.com/rickardenglund/tindeq-cli
-(`messages_test.go`). No tindeq-cli source code is included.
+(`messages_test.go`; MIT License, Copyright (c) 2025 Rickard Englund).
+No tindeq-cli source code is included.

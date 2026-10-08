@@ -13,7 +13,6 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
-import android.os.ParcelUuid
 import com.venturilogic.grip.ForceUnit
 import com.venturilogic.grip.devices.Progressor
 import kotlinx.coroutines.CompletableDeferred
@@ -140,8 +139,8 @@ class AndroidProgressor(
                 // Check every result: the name may only show up later, with the scan response.
                 val record = result.scanRecord
                 val name = record?.deviceName ?: result.device.name
-                val named = name?.startsWith(Progressor.NAME_PREFIX, ignoreCase = true) == true
-                if (named || record?.serviceUuids?.contains(SERVICE_PARCEL_UUID) == true) {
+                val uuids = record?.serviceUuids?.map { it.toString() } ?: emptyList()
+                if (Progressor.matchesAdvertisement(name, uuids)) {
                     found.complete(result.device)
                 }
             }
@@ -230,7 +229,9 @@ class AndroidProgressor(
                 }
                 return
             }
-            lastDataMs = now // Any frame keeps the watchdog quiet, even one dropped below.
+            // Only a valid weight frame counts as data: truncated or unknown frames must not
+            // hide a stalled stream from the watchdog.
+            if (Progressor.responseOf(value) == Progressor.Response.WEIGHT_MEASUREMENT) lastDataMs = now
             if (!streaming || tareBlackout) return
             for (kg in Progressor.parseWeights(value)) {
                 _samples.tryEmit(RawSample(kg, now))
@@ -383,7 +384,6 @@ class AndroidProgressor(
         const val WATCHDOG_RESTART_GAP_MS = 500L
         const val REQUESTED_MTU = 517
         val SERVICE_UUID: UUID = UUID.fromString(Progressor.SERVICE)
-        val SERVICE_PARCEL_UUID = ParcelUuid(SERVICE_UUID)
         val DATA_POINT_UUID: UUID = UUID.fromString(Progressor.DATA_POINT)
         val CONTROL_POINT_UUID: UUID = UUID.fromString(Progressor.CONTROL_POINT)
         val CCCD_UUID: UUID = UUID.fromString(Progressor.CCCD)

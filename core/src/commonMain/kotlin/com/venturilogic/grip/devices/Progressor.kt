@@ -3,8 +3,8 @@
  * (packages/core/src/models/device/progressor.model.ts)
  * Copyright (c) 2024, Stevie-Ray Hartog. BSD 2-Clause License. See NOTICE.md.
  *
- * Primary source: Tindeq "Progressor API" (Bluetooth interface and example client)
- * https://github.com/blims/Tindeq-Progressor-API
+ * Primary source: Tindeq "Progressor API" https://tindeq.com/progressor_api/
+ * (text and example client mirrored at https://github.com/blims/Tindeq-Progressor-API)
  */
 package com.venturilogic.grip.devices
 
