@@ -7,6 +7,7 @@ tare/statistics/activity logic in `core/` are ported from
 https://github.com/Stevie-Ray/hangtime-grip-connect, specifically:
 
 - `packages/core/src/models/device/forceboard.model.ts` → `core/.../devices/ForceBoard.kt`
+- `packages/core/src/models/device/progressor.model.ts` → `core/.../devices/Progressor.kt`
 - `packages/core/src/models/device/wh-c06.model.ts` → `core/.../devices/WhC06.kt`
 - `packages/core/src/models/device.model.ts` (applyTare, activityCheck, stats) → `core/.../ForceSession.kt`
 - `packages/core/src/utils.ts` (unit conversion) → `core/.../ForceUnit.kt`
@@ -56,3 +57,13 @@ Copyright (c) 2024 sebws). No Crane source code is included.
 
 Force Board protocol details are also documented in PitchSix's
 "Force Board Portable Public API 1.0": https://pitchsix.com/pages/downloads
+
+## Tindeq
+
+Progressor protocol details are also documented in Tindeq's public
+"Progressor API": https://tindeq.com/progressor_api/, with an example client at
+https://github.com/blims/Tindeq-Progressor-API
+
+The real-unit weight records in `core/src/commonTest/.../ProgressorTest.kt` come
+from a capture published in https://github.com/rickardenglund/tindeq-cli
+(`messages_test.go`). No tindeq-cli source code is included.
